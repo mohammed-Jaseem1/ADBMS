@@ -1,0 +1,90 @@
+5.        Create an INVOICE database and having following tables.
+
+                      Customer(id, name, address, city, ph_no)
+
+                      Product(pid,  pname, price (default 0))
+
+                      Invoice_master(inv_id, cust_id(FK), inv_date)
+
+                      Invoice_item(inv_id (FK),  pid(FK), quantity)
+                      mysql> desc Customer;
+        CREATE TABLE Customer ( id INT PRIMARY KEY,name VARCHAR(100) NOT NULL,address VARCHAR(255) NOT NULL,city VARCHAR(100),ph_no VARCHAR(20));
+Query OK, 0 rows affected (0.57 sec)
+
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| id      | int          | NO   | PRI | NULL    |       |
+| name    | varchar(100) | NO   |     | NULL    |       |
+| address | varchar(255) | NO   |     | NULL    |       |
+| city    | varchar(100) | YES  |     | NULL    |       |
+| ph_no   | varchar(20)  | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+CREATE TABLE Product ( pid INT PRIMARY KEY,pname VARCHAR(100) NOT NULL, price DECIMAL(10, 2) DEFAULT 0.00 );
+Query OK, 0 rows affected (1.08 sec)
+
+desc Product;
++-------+---------------+------+-----+---------+-------+
+| Field | Type          | Null | Key | Default | Extra |
++-------+---------------+------+-----+---------+-------+
+| pid   | int           | NO   | PRI | NULL    |       |
+| pname | varchar(100)  | NO   |     | NULL    |       |
+| price | decimal(10,2) | YES  |     | 0.00    |       |
++-------+---------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+ CREATE TABLE Invoice_master (inv_id INT PRIMARY KEY,cust_id INT,inv_date DATE,FOREIGN KEY (cust_id) REFERENCES Customer(id));
+Query OK, 0 rows affected (1.66 sec)
+
+desc Invoice_master;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| inv_id   | int  | NO   | PRI | NULL    |       |
+| cust_id  | int  | YES  | MUL | NULL    |       |
+| inv_date | date | YES  |     | NULL    |       |
++----------+------+------+-----+---------+-------+
+ CREATE TABLE Invoice_item(inv_id INT,pid INT,quantity INT,FOREIGN KEY (inv_id) REFERENCES Invoice_master(inv_id),FOREIGN KEY
+ (pid) REFERENCES Product(pid));
+3 romysql> desc Invoice_item;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| inv_id   | int  | YES  | MUL | NULL    |       |
+| pid      | int  | YES  | MUL | NULL    |       |
+| quantity | int  | YES  |     | NULL    |       |
++----------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+1. Add a column ‘SSN’ at the first position in the table EMPLOYEE
+ALTER TABLE employee ADD COLUMN SSN VARCHAR(20) FIRST;
+Query OK, 0 rows affected (1.36 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+2. Change the data type of the column ‘DOB’  in year the table EMPLOYEE  
+ALTER TABLE employee MODIFY COLUMN DOB YEAR;
+Query OK, 0 rows affected (1.89 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+3. Delete the column ‘emp_id’ the table EMPLOYEE. 
+ALTER TABLE employee DROP COLUMN emp_id;
+Query OK, 0 rows affected (1.26 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+ 4. Add  the constraint unique for columns ‘SSN, ‘adhar_no’ the table EMPLOYEE
+ ALTER TABLE employee ADD CONSTRAINT ssn_adhar UNIQUE (SSN, adhar_no);
+Query OK, 0 rows affected (0.67 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+5. Delete the NULL constraint of ‘age’ in the STUDENT table.
+ALTER TABLE student MODIFY COLUMN age INT NULL;
+Query OK, 0 rows affected (1.70 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+ 6. Change the table name EMPLOYEE as PERSON
+ RENAME TABLE employee TO PERSON;
+Query OK, 0 rows affected (0.40 sec)
+
+ 7. Delete the table STUDENT1
+ drop table student1;
+Query OK, 0 rows affected (0.25 sec)
+
