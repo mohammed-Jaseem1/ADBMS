@@ -1,0 +1,204 @@
+a) TCL COMMANDS
+
+
+          1.    Commit
+          2.    Rollback
+          3.    Savepoint
+
+insert into student values(01,'jas',21,'abc','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.11 sec)
+ select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       1 | jas  |   21 | abc     | m      |
++---------+------+------+---------+--------+
+
+mysql> set autocommit=off;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> use mj1;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       1 | jas  |   21 | abc     | m      |
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> delete from student where roll_no=1;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       1 | jas  |   21 | abc     | m      |
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> delete from student where roll_no=1;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+2 rows in set (0.00 sec)
+
+
+set autocommit=off;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> use mj1;
+Database changed
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into student values(3,'kk',23,'jj','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into student values(4,'tkk',23,'tjj','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> insert into student values(5,'rkk',24,'trj','m');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|       3 | kk   |   23 | jj      | m      |
+|       4 | tkk  |   23 | tjj     | m      |
+|       5 | rkk  |   24 | trj     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> rollback to s2;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from student;
++---------+------+------+---------+--------+
+| roll_no | Name | age  | address | gender |
++---------+------+------+---------+--------+
+|       2 | abv  |   22 | abf     | m      |
+|       3 | kk   |   23 | jj      | m      |
+|       4 | tkk  |   23 | tjj     | m      |
+|      21 | lase |   20 | abc     | m      |
++---------+------+------+---------+--------+
+4 rows in set (0.00 sec)
+
+
+                  
+b) DCL COMMAND
+ Create two users user1, user2
+
+CREATE USER 'user1'@'localhost' IDENTIFIED BY 'StrongPassword123!';
+Query OK, 0 rows affected (0.16 sec)
+
+
+
+CREATE USER 'user2'@'localhost' IDENTIFIED BY 'EtrongPassword123!';
+Query OK, 0 rows affected (0.10 sec)
+
+
+1.              GRANT
+
+Give insert and select privilege to user 1 on customer table in the invoice database.
+
+GRANT SELECT, INSERT ON INVOICE.Customer TO 'user1'@'localhost';
+Query OK, 0 rows affected (0.08 sec)
+show grants for 'user1'@'localhost' ;
++---------------------------------------------------------------------+
+| Grants for user1@localhost                                          |
++---------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user1`@`localhost`                           |
+| GRANT SELECT, INSERT ON `INVOICE`.`Customer` TO `user1`@`localhost` |
++---------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
+Give update and delete privilege to user 2 on all tables in the invoice database.
+GRANT UPDATE, DELETE ON invoice.* TO 'user2'@'localhost';
+Query OK, 0 rows affected (0.09 sec)
+ show grants for 'user2'@'localhost' ;
++----------------------------------------------------+
+| Grants for user2@localhost                         |
++----------------------------------------------------+
+| GRANT USAGE ON *.* TO `user2`@`localhost`          |
+| GRANT UPDATE ON `invoice`.* TO `user2`@`localhost` |
++----------------------------------------------------+
+
+2 rows in set (0.00 sec)
+
+GRANT UPDATE, DELETE ON invoice.* TO 'user2'@'localhost';
+Query OK, 0 rows affected (0.09 sec)
+
+
+2.              REVOKE
+
+Remove delete privilege of user 2.
+
+REVOKE DELETE ON invoice.* FROM 'user2'@'localhost';
+Query OK, 0 rows affected (0.10 sec)
+
+
+
+
+
