@@ -198,7 +198,7 @@ Remove delete privilege of user 2.
 REVOKE DELETE ON invoice.* FROM 'user2'@'localhost';
 Query OK, 0 rows affected (0.10 sec)
 
-
+//VERIFIED
 
 
 
