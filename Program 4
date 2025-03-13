@@ -190,4 +190,4 @@ mysql> select concat(name, '     lives in      ',city) from Customer;
 +-------+--------+----------+------+------------+
 1 row in set (0.00 sec)
 
-
+//VERIFIED
