@@ -1,0 +1,193 @@
+select * from Invoice_item;
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 | 1001 |        5 |
+|    102 | 1002 |       10 |
+|    103 | 1003 |        1 |
+|    104 | 1004 |        6 |
+|    101 | 1001 |        6 |
++--------+------+----------+
+5 rows in set (0.00 sec)
+select * from Invoice_master;
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    101 |   10001 | 2024-05-15 |
+|    102 |   10002 | 2024-06-15 |
+|    103 |    1000 | 2024-07-15 |
+|    104 |   10004 | 2024-08-15 |
+|    105 |   10005 | 2024-09-15 |
++--------+---------+------------+
+mysql> select * from Customer;
++-------+--------+----------------+------+------------+
+| id    | name   | address        | city | ph_no      |
++-------+--------+----------------+------+------------+
+|  1000 | linto  | kadavu         | clk  | 8306681043 |
+| 10001 | bilal  | chemman kadavu | tvm  | 7306681043 |
+| 10002 | lal    | emman kadavu   | ekm  | 9306681043 |
+| 10004 | aswin  | davu           | ekm  | 6306681043 |
+| 10005 | nabeel | Queen street   | nlb  | NULL       |
++-------+--------+----------------+------+------------+
+
+1.    List all invoice items, avoid duplicates.
+
+mysql> select DISTINCT inv_id from Invoice_item;
++--------+
+| inv_id |
++--------+
+|    101 |
+|    102 |
+|    103 |
+|    104 |
++--------+
+4 rows in set (0.00 sec)
+2.    List the invoice details from 1st January 2024 to 31st march 2024
+ select inv_id from Invoice_master where inv_date between '2024-05-01' and '2024-08-31';
++--------+
+| inv_id |
++--------+
+|    101 |
+|    102 |
+|    103 |
+|    104 |
++--------+
+4 rows in set (0.00 sec)
+3.    List the customer details who not live in ‘tvm’.
+select * from Customer where city !='tvm' order by city;
++-------+--------+--------------+------+------------+
+| id    | name   | address      | city | ph_no      |
++-------+--------+--------------+------+------------+
+|  1000 | linto  | kadavu       | clk  | 8306681043 |
+| 10002 | lal    | emman kadavu | ekm  | 9306681043 |
+| 10004 | aswin  | davu         | ekm  | 6306681043 |
+| 10005 | nabeel | Queen street | nlb  | 45855744   |
++-------+--------+--------------+------+------------+
+4 rows in set (0.00 sec)
+
+4.    List the customers who have no phone number.
+select * from Customer where ph_no is NULL order by ph_no;
++-------+--------+--------------+------+-------+
+| id    | name   | address      | city | ph_no |
++-------+--------+--------------+------+-------+
+| 10005 | nabeel | Queen street | nlb  | NULL  |
++-------+--------+--------------+------+-------+
+1 row in set (0.00 sec)
+
+5.    Display customer names in descending order.
+select name from Customer order by name desc;
++--------+
+| name   |
++--------+
+| nabeel |
+| linto  |
+| lal    |
+| bilal  |
+| aswin  |
++--------+
+5 rows in set (0.00 sec)
+
+6.    Display the customer details sorted in ascending by city and descending by names.
+select *  from Customer order by city asc,name desc;
++-------+--------+----------------+------+------------+
+| id    | name   | address        | city | ph_no      |
++-------+--------+----------------+------+------------+
+|  1000 | linto  | kadavu         | clk  | 8306681043 |
+| 10002 | lal    | emman kadavu   | ekm  | 9306681043 |
+| 10004 | aswin  | davu           | ekm  | 6306681043 |
+| 10006 | raymon | kivinada       | hhm  | 5365425623 |
+| 10005 | nabeel | Queen street   | nlb  | NULL       |
+| 10001 | bilal  | chemman kadavu | tvm  | 7306681043 |
++-------+--------+----------------+------+------------+
+6 rows in set (0.00 sec)
+
+
+7.    Find the customer names who have ‘e’ or ‘a’ in them and at least 3 characters in length
+mysql> select * from Customer where( name like "%a%" or name like "%e%") and name like "___%";
++-------+--------+----------------+------+------------+
+| id    | name   | address        | city | ph_no      |
++-------+--------+----------------+------+------------+
+| 10001 | bilal  | chemman kadavu | tvm  | 7306681043 |
+| 10002 | lal    | emman kadavu   | ekm  | 9306681043 |
+| 10004 | aswin  | davu           | ekm  | 6306681043 |
+| 10005 | nabeel | Queen street   | nlb  | NULL       |
++-------+--------+----------------+------+------------+
+4 rows in set (0.01 sec)
+
+8.    List the names of customers their names have ‘r’ in second position.
+mysql> select * from Customer where NAME LIKE "__y%";
++-------+--------+----------+------+------------+
+| id    | name   | address  | city | ph_no      |
++-------+--------+----------+------+------------+
+
+b) OPTIMIZING DATABASE:  (GROUP BY, AGGREGATE FUNCTIONS)
+
+1.    List product name, price except soap on price order.
+
+select pname,price from Product where pname<> 'soap' order by price desc;
+
++-----------+--------+
+| pname     | price  |
++-----------+--------+
+| ice_cream | 102.00 |
+| pen       |  91.80 |
+| pencil    |  15.30 |
+| pen       |  10.00 |
++-----------+--------+
+4 rows in set (0.00 sec)
+
+2.    Find minimum, maximum and average price of products.
+
+select MIN(price)as min_price ,MAX(price) as max_price,AVG(price) as avg_price from Product;
++-----------+-----------+-----------+
+| min_price | max_price | avg_price |
++-----------+-----------+-----------+
+|     10.00 |    102.00 | 54.820000 |
++-----------+-----------+-----------+
+1 row in set (0.00 sec)
+
+3.    Find number of customers in each city.
+select city, count(*)  from Customer group by city;
++------+----------+
+| city | count(*) |
++------+----------+
+| clk  |        1 |
+| tvm  |        1 |
+| ekm  |        2 |
+| nlb  |        1 |
+| hhm  |        1 |
++------+----------+
+5 rows in set (0.01 sec)
+
+
+4.    Find number of customers in each city, only include city with more than 3 customers.
+
+select city ,count(*) from Customer group by city having count(*) >=2;
++------+----------+
+| city | count(*) |
++------+----------+
+| ekm  |        2 |
++------+----------+
+1 row in set (0.00 sec)
+
+
+5. Show data as displayed ‘who, where’ Eg: ‘customer1 lives in ekm’
+mysql> select concat(name, '     lives in      ',city) from Customer;
++------------------------------------------+
+| concat(name, '     lives in      ',city) |
++------------------------------------------+
+| linto     lives in      clk              |
+| bilal     lives in      tvm              |
+| lal     lives in      ekm                |
+| aswin     lives in      ekm              |
+| nabeel     lives in      nlb             |
+| raymon     lives in      hhm             |
++------------------------------------------+
+6 rows in set (0.00 sec)
+
+
+| 10006 | raymon | kivinada | hhm  | 5365425623 |
++-------+--------+----------+------+------------+
+1 row in set (0.00 sec)
+
+
