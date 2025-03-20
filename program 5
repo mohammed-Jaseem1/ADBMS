@@ -1,7 +1,7 @@
 1.    List the product name and price of each invoice item.
 
 select pname,price from Product where pid in(select pid from Invoice_item);
-+-----------+--------+
++-----------+--------+ 
 | pname     | price  |
 +-----------+--------+
 | pen       |  91.80 |
