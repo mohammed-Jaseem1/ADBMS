@@ -63,3 +63,4 @@ select distinct name from Customer where id in(select cust_id from Invoice_maste
 +-------+
 1 row in set (0.00 sec)
 
+//VERIFIED
