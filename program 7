@@ -1,0 +1,88 @@
+OPTIMIZING DATABASE: (JOINS)
+1.     List the product name and quantity of invoice items.
+select p.pname,i.quantity from Invoice_item i join Product p on i.pid=p.pid;
++-----------+----------+
+| pname     | quantity |
++-----------+----------+
+| pen       |        5 |
+| pencil    |       10 |
+| ice_cream |        1 |
+| pen       |        6 |
+| pen       |        6 |
++-----------+----------+
+5 rows in set (0.00 sec)
+2.    Display invoice details of the transaction dated ’31-01-2022’.
+ select * from Invoice_master im join Invoice_item ii on im.inv_id=ii.inv_id where inv_date='2024-06-15';
++--------+---------+------------+--------+------+----------+
+| inv_id | cust_id | inv_date   | inv_id | pid  | quantity |
++--------+---------+------------+--------+------+----------+
+|    102 |   10002 | 2024-06-15 |    102 | 1002 |       10 |
++--------+---------+------------+--------+------+----------+
+1 row in set (0.00 sec)
+3.    Display the customer name, product name, invoice date of purchased item ‘pen’.
+select name,p.pname,im.inv_date from Invoice_master im inner join Customer c on c.id=im.cust_id inner join Invoice_item ii on im.inv_id inner join Product p on p.pid=ii.pid where p.pname='pen';
++--------+-------+------------+
+| name   | pname | inv_date   |
++--------+-------+------------+
+| linto  | pen   | 2024-07-15 |  
+| bilal  | pen   | 2024-05-15 |
+| lal    | pen   | 2024-06-15 |
+| aswin  | pen   | 2024-08-15 |
+| nabeel | pen   | 2024-09-15 |
++--------+-------+------------+
+15 rows in set (0.00 sec)
+4.    Display all customer details and invoice details must include customer has not purchased items.
+select C.id,C.name,im.inv_id,im.inv_date from Customer C left join Invoice_master im on im.cust_id=C.id;
++-------+--------+--------+------------+
+| id    | name   | inv_id | inv_date   |
++-------+--------+--------+------------+
+|  1000 | linto  |    103 | 2024-07-15 |
+| 10001 | bilal  |    101 | 2024-05-15 |
+| 10002 | lal    |    102 | 2024-06-15 |
+| 10004 | aswin  |    104 | 2024-08-15 |
+| 10005 | nabeel |    105 | 2024-09-15 |
+| 10006 | raymon |   NULL | NULL       |
++-------+--------+--------+------------+
+6 rows in set (0.00 sec)
+ OPTIMIZING DATABASE: (Using Set, arithmetic, logical and special operators)
+
+1.        Display customer_id, city  who lives either in ‘CLT’ or in ‘TVM’
+select name,city from Customer where city="ekm" or city="tvm";
++-------+------+
+| name  | city |
++-------+------+
+| bilal | tvm  |
+| lal   | ekm  |
+| aswin | ekm  |
++-------+------+
+3 rows in set (0.00 sec)
+2.       Display product details with an updated price amount(new price= old price+5rs)
+select pid,pname,price+5  as price from Product;
++------+-----------+---------+
+| pid  | pname     | price   |
++------+-----------+---------+
+| 1001 | pen       |   96.80 |
+| 1002 | pencil    |   20.30 |
+| 1003 | ice_cream |  107.00 |
+| 1004 | pen       |   15.00 |
+| 1005 | soap      |   60.00 |
+| 1006 | lolly pop |   30.00 |
++------+-----------+---------+
+6 rows in set (0.00 sec)
+3.    Display customer details who doesn’t have phone number and lives in ‘Calicut’ city (use logical operators)
+ select * from Customer where city="nlb" and ph_no is null;
++-------+--------+--------------+------+-------+
+| id    | name   | address      | city | ph_no |
++-------+--------+--------------+------+-------+
+| 10005 | nabeel | Queen street | nlb  | NULL  |
++-------+--------+--------------+------+-------+
+1 row in set (0.00 sec)
+4.    List the product names if it finds any records in the invoice items table has quantity =3 (use special operators)
+select pname from Product p where exists(select pid from Invoice_item ii where ii.pid=p.pid and quantity=5);
++-------+
+| pname |
++-------+
+| pen   |
++-------+
+1 row in set (0.00 sec)
+
