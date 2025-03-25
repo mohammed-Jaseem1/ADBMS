@@ -26,3 +26,4 @@ mysql> select * from v2;
 | 1006 | lolly pop | 25.00 |
 +------+-----------+-------+
 2 rows in set (0.03 sec)
+//VERIFIED
