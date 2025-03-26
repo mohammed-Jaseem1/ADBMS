@@ -86,3 +86,4 @@ select pname from Product p where exists(select pid from Invoice_item ii where i
 +-------+
 1 row in set (0.00 sec)
 
+//VERIFIED
