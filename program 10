@@ -1,0 +1,75 @@
+ 
+ 1.      Create a trigger to handle updates to the customer table.
+ delimiter $
+mysql> create trigger c_upd
+    -> after update on Customer 
+    -> for each row begin 
+    -> insert into cust set id=new.id,name=new.name,city=new.city,ph_no=new.ph_no;
+    -> end $
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> create table cust(id int,name varchar(10),city varchar(10),ph_no int) $
+Query OK, 0 rows affected (1.15 sec)
+
+mysql> select * from Customer $
++-------+--------+----------------+------+------------+
+| id    | name   | address        | city | ph_no      |
++-------+--------+----------------+------+------------+
+|  1000 | linto  | kadavu         | clk  | 8306681043 |
+| 10001 | bilal  | chemman kadavu | tvm  | 7306681043 |
+| 10002 | lal    | emman kadavu   | ekm  | 9306681043 |
+| 10004 | aswin  | davu           | ekm  | 6306681043 |
+| 10005 | nabeel | Queen street   | nlb  | NULL       |
+| 10006 | raymon | kivinada       | hhm  | 5365425623 |
++-------+--------+----------------+------+------------+
+6 rows in set (0.00 sec)
+update Customer set city='kozhikode' where id='10005' $
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+select * from Customer $
++-------+--------+----------------+-----------+------------+
+| id    | name   | address        | city      | ph_no      |
++-------+--------+----------------+-----------+------------+
+|  1000 | linto  | kadavu         | clk       | 8306681043 |
+| 10001 | bilal  | chemman kadavu | tvm       | 7306681043 |
+| 10002 | lal    | emman kadavu   | ekm       | 9306681043 |
+| 10004 | aswin  | davu           | ekm       | 6306681043 |
+| 10005 | nabeel | Queen street   | kozhikode | NULL       |
+| 10006 | raymon | kivinada       | hhm       | 5365425623 |
++-------+--------+----------------+-----------+------------+
+6 rows in set (0.00 sec)
+select * from cust $
++-------+--------+-----------+-------+
+| id    | name   | city      | ph_no |
++-------+--------+-----------+-------+
+| 10005 | nabeel | kozhikode |  NULL |
++-------+--------+-----------+-------+
+2 rows in set (0.00 sec)
+2.      Create a trigger to handle inserts to the product relation ( if price < 5 the set price to 10).
+ create trigger p_ins
+    -> before insert on Product
+    -> for each row begin
+    -> if new.price <5 then
+    -> set new.price=10;
+    -> end if ;
+    -> end$
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> insert into Product values(4,'scale',3)$
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from Product $
++------+-----------+--------+
+| pid  | pname     | price  |
++------+-----------+--------+
+|    4 | scale     |  10.00 |
+| 1001 | pen       |  91.80 |
+| 1002 | pencil    |  15.30 |
+| 1003 | ice_cream | 102.00 |
+| 1004 | pen       |  10.00 |
+| 1005 | soap      |  55.00 |
+| 1006 | lolly pop |  25.00 |
++------+-----------+--------+
+7 rows in set (0.00 sec)
+
