@@ -32,3 +32,4 @@ mysql> select pname,price,price_range1(price) as price_range1 from Product;
 | lolly pop |  25.00 | medium       |
 +-----------+--------+--------------+
 6 rows in set (0.02 sec)
+//VERIFIED
