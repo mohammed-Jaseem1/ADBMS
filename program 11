@@ -32,3 +32,4 @@ mysql> select @name_list;
 | raymon;nabeel;aswin;lal;bilal;linto; |
 +--------------------------------------+
 1 row in set (0.00 sec)
+//VERIFIED
