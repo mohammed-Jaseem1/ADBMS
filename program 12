@@ -55,3 +55,4 @@ db.customer.deleteOne({city: "Calicut"})
 
 //RESUBMIT
 //{phoneno:8306681043})
+//VERIFIED
