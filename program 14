@@ -1,0 +1,83 @@
+1.Write a MongoDB query to sort customer details in ascending order of their name.
+db.customer.find().sort({name:1})
+[
+  {
+    _id: ObjectId('67ff6d70fe46e87cabd861e0'),
+    id: 6,
+    name: 'aami',
+    city: 'calicut',
+    phoneno: 9444658696
+  },
+  {
+    _id: ObjectId('67fe2a8fd00f79723cd861e6'),
+    id: 5,
+    name: 'aswin',
+    city: 'ekm',
+    phoneno: 6306681043
+  },
+  {
+    _id: ObjectId('67fe2610d00f79723cd861e1'),
+    id: 2,
+    name: 'ayisha liya',
+    email: 'ayisha_liya@123',
+    phoneno: 7306681042
+  },
+  {
+    _id: ObjectId('67fe2a79d00f79723cd861e5'),
+    id: 4,
+    name: 'linto',
+    city: 'tvm',
+    phoneno: 9306681043
+  },
+  {
+    _id: ObjectId('67fe2a3cd00f79723cd861e4'),
+    id: 3,
+    name: 'roshan',
+    city: 'tvm',
+    phoneno: 7306681043
+  }
+]
+2.Write a MongoDB query to count number of customers in each city.
+ db.customer.aggregate([{$group:{_id:"$city",customercount:{$sum:1}}}])
+[
+  { _id: null, customercount: 1 },
+  { _id: 'ekm', customercount: 1 },
+  { _id: 'calicut', customercount: 1 },
+  { _id: 'tvm', customercount: 2 }
+]
+3.      Write a MongoDB query to find minimum and maximum age in each city.
+db.customer.aggregate([{$group:{_id:"$city",minAge:{$min:"$age"},maxAge:{$max:"$age"}}}])
+[
+  { _id: null, minAge: 23, maxAge: 23 },
+  { _id: 'ekm', minAge: 23, maxAge: 23 },
+  { _id: 'calicut', minAge: 22, maxAge: 22 },
+  { _id: 'tvm', minAge: 22, maxAge: 24 }
+]
+
+
+4.       Write a MongoDB query using the $match stage to retrieve all customer documents whose customer_name starts with the letter “S”.
+ db.customer.aggregate([{$match:{name:{$regex:/^S/,$options:"i"}}}])
+[
+  {
+    _id: ObjectId('67ff743bfe46e87cabd861e1'),
+    id: 7,
+    name: 'sinan',
+    age: 24,
+    city: 'tvm'
+  }
+]
+
+5.      Write a query using $lookup to join CUSTOMER and PRODUCT collections and display only customer name, product name, and price.
+db.customer.aggregate([{$lookup:{from:"product",localField:"p_id",foreignField:"id",as:"productinfo"}},{$project:{_id:0,customername:"$name",productname:{$arrayElemAt:["$productinfo.name",0]},price:{$arrayElemAt:["$productinfo.price",0]}}}])
+[
+  {
+    customername: 'ayisha liya',
+    productname: 'playerstation',
+    price: 25000
+  },
+  {
+    customername: 'roshan',
+    productname: 'playerstation5',
+    price: 30000
+  }
+]
