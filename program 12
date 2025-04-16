@@ -49,7 +49,7 @@ db.customer.updateOne({name:"mohammed jaseem"},{$set:{phoneno:8306681043}})
   upsertedCount: 0
 }
 4.      Write a MongoDB query to delete the first matched document whose city is “Calicut”.
-db.customer.deleteOne({phoneno:8306681043})
+db.customer.deleteOne({city: "Calicut"})
 { acknowledged: true, deletedCount: 1 }
 
 
