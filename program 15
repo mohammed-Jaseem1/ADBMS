@@ -1,0 +1,48 @@
+1.Write a MongoDB query to create a user “CUSTOMER1” and grant the read role in the INVOICE database.
+db.createUser({user:"CUSTOMER1",pwd:"customer1",roles:[{role:"read",db:"INVOICE"}]})
+{ ok: 1 }
+INVOICE> show users
+[
+  {
+    _id: 'INVOICE.CUSTOMER1',
+    userId: UUID('20e79a65-80d8-4a1f-ba02-91fb412c6663'),
+    user: 'CUSTOMER1',
+    db: 'INVOICE',
+    roles: [ { role: 'read', db: 'INVOICE' } ],
+    mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]
+  }
+]
+2.Write a MongoDB query to create the backup for the INVOICE database.
+ mongodump --db=INVOICE --out=/home/ksb/ksb
+2025-04-22T15:04:07.939+0530	writing INVOICE.product to /home/ksb/ksb/INVOICE/product.bson
+2025-04-22T15:04:07.940+0530	done dumping INVOICE.product (4 documents)
+2025-04-22T15:04:07.941+0530	writing INVOICE.customer to /home/ksb/ksb/INVOICE/customer.bson
+2025-04-22T15:04:07.941+0530	done dumping INVOICE.customer (6 documents)
+
+3.Write a MongoDB query to restore a particular database or a collection.
+
+(base) ksb@ksb-OptiPlex-3060:~$ mongorestore --db INVOICE /home/ksb/ksb/INVOICE
+2025-04-22T15:21:36.147+0530	The --db and --collection flags are deprecated for this use-case; please use --nsInclude instead, i.e. with --nsInclude=${DATABASE}.${COLLECTION}
+2025-04-22T15:21:36.147+0530	building a list of collections to restore from /home/ksb/ksb/INVOICE dir
+2025-04-22T15:21:36.147+0530	don't know what to do with file "/home/ksb/ksb/INVOICE/prelude.json", skipping...
+2025-04-22T15:21:36.147+0530	reading metadata for INVOICE.customer from /home/ksb/ksb/INVOICE/customer.metadata.json
+2025-04-22T15:21:36.147+0530	reading metadata for INVOICE.product from /home/ksb/ksb/INVOICE/product.metadata.json
+2025-04-22T15:21:36.512+0530	restoring INVOICE.customer from /home/ksb/ksb/INVOICE/customer.bson
+2025-04-22T15:21:36.549+0530	finished restoring INVOICE.customer (6 documents, 0 failures)
+2025-04-22T15:21:36.608+0530	restoring INVOICE.product from /home/ksb/ksb/INVOICE/product.bson
+2025-04-22T15:21:36.664+0530	finished restoring INVOICE.product (4 documents, 0 failures)
+2025-04-22T15:21:36.664+0530	no indexes to restore for collection INVOICE.customer
+2025-04-22T15:21:36.664+0530	no indexes to restore for collection INVOICE.product
+2025-04-22T15:21:36.664+0530	10 document(s) restored successfully. 0 document(s) failed to restore.
+
+4.Write a MongoDB query to create an index for the collection customer using the field customer_name.
+INVOICE> db.customer.createIndex({name:1})
+name_1
+INVOICE> db.customer.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' },
+]
+
+
+
